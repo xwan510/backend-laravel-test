@@ -1,37 +1,49 @@
-# Sample Laravel Project
+# Test Laravel Project
+
+This is a Laravel test project providing APIs for property analytics inquiry.
 
 ## Requirements
-Make sure you have Laravel server requirements checked [here](https://laravel.com/docs/7.x/installation).
+
+Make sure you have everything installed as in [Laravel server requirements](https://laravel.com/docs/7.x/installation).
 
 ## Installation
+
 - Copy file `.env.example` to `.env`
 
-- Setup SQLite and DB connection
-Creating a new SQLite database using a command such as
+- Create SQLite file with command such as
+
 ```
 touch /path/to/project/database/database.sqlite
 ```
-Edit .env for DB connection
+
+- Edit .env for DB connection
+
 ```
 DB_CONNECTION=sqlite
 DB_DATABASE=/path/to/project/database/database.sqlite
 DB_FOREIGN_KEYS=true
 ```
 
-- Use another type of DB
-If you use another type of DB. Please follow Laravel manual [here](https://laravel.com/docs/7.x/database#configuration) to setup DB connection.
+- Use another type of DB?
+
+Please follow [Laravel manual](https://laravel.com/docs/7.x/database#configuration) to setup DB connection.
 
 - Install project dependencies
+
 ```
 composer install
 ```
 
 - Run migration and seed DB
+
 ```
 php artisan migrate:fresh --seed
 ```
 
+## Testing
+
 - Start web server
+
 ```
 php artisan serve
 ```
@@ -40,6 +52,7 @@ php artisan serve
 
 
 - Run tests
+
 ```
 php artisan test
 ```
