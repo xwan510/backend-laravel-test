@@ -17,9 +17,9 @@ class CreatePropertiesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid('guid')->unique();
-            $table->char('suburb', 50)->index();
-            $table->char('state', 50)->index();
-            $table->char('country', 50)->index();
+            $table->string('suburb', 80)->index();
+            $table->string('state', 80)->index();
+            $table->string('country', 80)->index();
         });
     }
 

@@ -23,9 +23,7 @@ class PropertyAnalyticsSummaryTest extends TestCase
         $expectedData = [];
         foreach ($analyticTypes as $type) {
             foreach ($properties as $property) {
-                $response = $property->analytics()->attach($type->id, ['value' => $this->faker->randomNumber(3)]);
-                $response->assertStatus(200);
-                $response->assertJson(['data' => $data]);
+                $property->analytics()->attach($type->id, ['value' => $this->faker->randomNumber(3)]);
             }
         }
 
@@ -49,25 +47,32 @@ class PropertyAnalyticsSummaryTest extends TestCase
                 The application uses DB raw queries, so we verify it with another method.
                 */
                 $collection = $type->properties()->where($filter, '=', $filterValue)->get();
-                $maxValue = $collection->max('pivot.value');
-                $minValue = $collection->min('pivot.value');
-                $medianValue = $collection->median('pivot.value');
+                $maxValue = $collection->max('analytic.value');
+                $minValue = $collection->min('analytic.value');
+                $medianValue = $collection->median('analytic.value');
                 $hasValueCount = count($collection);
                 $hasValuePerc = round($hasValueCount / ($totalProperties / 100), 2);
                 $hasNoValuePerc = round(($totalProperties - $hasValueCount) / ($totalProperties / 100), 2);
                 $expectedData[] = [
                     'name' => $type->name,
                     'units' => $type->units,
-                    'is_numeric' => (int) $type->is_numeric,
+                    'is_numeric' => (boolean) $type->is_numeric,
                     'num_decimal_places' => (int) $type->num_decimal_places,
                     'min' => $minValue,
                     'max' => $maxValue,
                     'median' => $medianValue,
-                    'hasValue' => $hasValuePerc.'%',
-                    'hasNoValue' => $hasNoValuePerc.'%',
+                    'has_value' => $hasValuePerc.'%',
+                    'has_no_value' => $hasNoValuePerc.'%',
                 ];
             }
-            $response = $this->json('GET', '/api/v1/report/properties/analytics', [$filter => $filterValue]);
+            $response = $this->json(
+                'GET',
+                '/api/v1/report/properties/analytics',
+                [
+                    'filter' => $filter,
+                    'value' => $filterValue
+                ]
+            );
             $response->assertStatus(200);
             $response->assertJson($expectedData);
         }

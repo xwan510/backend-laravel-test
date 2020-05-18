@@ -37,7 +37,7 @@ class PropertyTest extends TestCase
             'country' => $this->faker->country,
         ];
         $response = $this->json('POST', '/api/v1/properties', $data);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     /**
@@ -52,6 +52,6 @@ class PropertyTest extends TestCase
             'country' => $this->faker->country,
         ];
         $response = $this->json('POST', '/api/v1/properties', $data);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 }

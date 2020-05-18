@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PropertyAnalytic extends Pivot
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'property_analytics';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

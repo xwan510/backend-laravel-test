@@ -17,10 +17,12 @@ class PropertyAnalyticsTest extends TestCase
     {
         $property = factory(Property::class)->create();
         $analyticType = factory(AnalyticType::class)->create();
+
+        // Add a property.
         $data = ['value' => (String) $this->faker->randomNumber(3)];
         $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/'.$analyticType->id, $data);
         $response->assertStatus(200);
-        $response->assertJson(['data' => $data]);
+        $response->assertJson($data);
     }
 
 
@@ -38,13 +40,13 @@ class PropertyAnalyticsTest extends TestCase
         $data = ['value' => (String) $this->faker->randomNumber(3)];
         $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/'.$analyticType->id, $data);
         $response->assertStatus(200);
-        $response->assertJson(['data' => $data]);
+        $response->assertJson($data);
 
         // Update it with a new value.
         $data = ['value' => $this->faker->randomNumber(3)];
         $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/'.$analyticType->id, $data);
         $response->assertStatus(200);
-        $response->assertJson(['data' => $data]);
+        $response->assertJson($data);
     }
 
     /**
@@ -67,11 +69,11 @@ class PropertyAnalyticsTest extends TestCase
                 'units' => $type->units,
                 'is_numeric' => (int) $type->is_numeric,
                 'num_decimal_places' => (int) $type->num_decimal_places,
-                'value' => (String) $postData['value'],
+                'analytic' => ['value' => (String) $postData['value']],
             ];
             $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/'.$type->id, $postData);
             $response->assertStatus(200);
-            $response->assertJson(['data' => $postData]);
+            $response->assertJson($postData);
         }
 
         // Test get all analytics for a property.
@@ -87,9 +89,9 @@ class PropertyAnalyticsTest extends TestCase
      */
     public function testPropertyAnalyticsInvalid()
     {
-        // Property non-exists.
-        $response = $this->json('GET', '/api/v1/properties/non-exist/analytics');
-        $response->assertStatus(404);
+        // Property invalid uuid format.
+        $response = $this->json('GET', '/api/v1/properties/invalid/analytics');
+        $response->assertStatus(422);
 
         $property = factory(Property::class)->create();
         $analyticType = factory(AnalyticType::class)->create();
@@ -97,14 +99,18 @@ class PropertyAnalyticsTest extends TestCase
 
         // Empty value.
         $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/'.$analyticType->id);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
 
-        // Analytic Type non-exists.
+        // Analytic Type invalid.
         $response = $this->json('PUT', '/api/v1/properties/'.$property->guid.'/analytics/non-exist');
-        $response->assertStatus(404);
+        $response->assertStatus(422);
 
-        // Property non-exists.
+        // Property invalid on PUT.
         $response = $this->json('PUT', '/api/v1/properties/non-exists/analytics/'.$analyticType->id, $data);
-        $response->assertStatus(404);
+        $response->assertStatus(422);
+
+        // Property invalid on GET.
+        $response = $this->json('GET', '/api/v1/properties/non-exists/analytics');
+        $response->assertStatus(422);
     }
 }

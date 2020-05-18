@@ -16,8 +16,8 @@ class CreateAnalyticTypesTable extends Migration
         Schema::create('analytic_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->char('name', 50);
-            $table->char('units', 50);
+            $table->string('name', 50);
+            $table->string('units', 50);
             $table->boolean('is_numeric');
             $table->integer('num_decimal_places');
         });

@@ -50,6 +50,8 @@ class Property extends Model
     {
         return $this->belongsToMany('App\AnalyticType', 'property_analytics')
                         ->using('App\PropertyAnalytic')
+                        ->as('analytic')
+                        ->withTimestamps()
                         ->withPivot([
                             'value',
                         ]);

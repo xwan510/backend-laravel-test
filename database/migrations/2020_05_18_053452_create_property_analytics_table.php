@@ -18,7 +18,7 @@ class CreatePropertyAnalyticsTable extends Migration
             $table->timestamps();
             $table->foreignId('property_id')->constrained()->onDelete('cascade');
             $table->foreignId('analytic_type_id')->constrained()->onDelete('cascade');
-            $table->index(['property_id', 'analytic_type_id'])->unique();
+            $table->unique(['property_id', 'analytic_type_id']);
             $table->text('value');
         });
     }
