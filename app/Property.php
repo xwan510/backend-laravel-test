@@ -44,7 +44,6 @@ class Property extends Model
     /**
      * The analytics that belong to the property.
      *
-     * @return void
      */
     public function analytics()
     {

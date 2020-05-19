@@ -17,7 +17,7 @@ class PropertyAnalyticsReportController extends Controller
      * Performance should be considered for mass reporting.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -31,7 +31,7 @@ class PropertyAnalyticsReportController extends Controller
         ]);
 
         // Get total number of properties.
-        $total = Property::where($validatedData['filter'], '=', $validatedData['value'])->count();
+        $total = (int) Property::where($validatedData['filter'], '=', $validatedData['value'])->count();
 
         // Use 1 raw query to improve performace.
         // percentile_cont is avaialble in most modern DB to calc median.
@@ -45,21 +45,21 @@ class PropertyAnalyticsReportController extends Controller
                                         analytic_types.units,
                                         analytic_types.is_numeric,
                                         analytic_types.num_decimal_places,
-                                        min(value) as min,
-                                        max(value) as max,
-                                        percentile_cont(0.5) within group (order by cast(value as float)) as median,
+                                        min(value::float) as min,
+                                        max(value::float) as max,
+                                        percentile_cont(0.5) within group (order by value::float) as median,
                                         concat(
                                             round(
-                                                cast(count(value) * 100 as decimal) / '.$total.',
+                                                count(value)::decimal * 100 / '.$total.',
                                                 2
-                                            ),
+                                            )::float,
                                             \'%\'
                                         ) as has_value,
                                         concat(
                                             round(
-                                                ('.$total.' - cast(count(value) as decimal)) * 100 / '.$total.',
+                                                ('.$total.' - count(value)::decimal) * 100 / '.$total.',
                                                 2
-                                            ),
+                                            )::float,
                                             \'%\'
                                         ) as has_no_value
                                         '))

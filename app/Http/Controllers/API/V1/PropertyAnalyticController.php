@@ -16,7 +16,7 @@ class PropertyAnalyticController extends Controller
      * Show analytics for a property.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request, $guid)
     {
@@ -33,7 +33,7 @@ class PropertyAnalyticController extends Controller
      * Set or update an analytic data for a property.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $guid, $analyticid)
     {
@@ -49,7 +49,7 @@ class PropertyAnalyticController extends Controller
 
         // Make sure model provided all exist.
         $property = Property::with('analytics')->where('guid', $guid)->firstOrFail();
-        $analyticType = AnalyticType::findOrFail($analyticid);
+        AnalyticType::findOrFail($analyticid);
 
         // Does relation exist?
         $exists = false;

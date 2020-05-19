@@ -13,7 +13,7 @@ class PropertyController extends Controller
      * Store a newly created Property.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {

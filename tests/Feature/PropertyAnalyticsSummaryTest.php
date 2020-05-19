@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Property;
@@ -34,7 +34,7 @@ class PropertyAnalyticsSummaryTest extends TestCase
         $testProperty = Property::find(1);
         $this->assertTrue(isset($testProperty));
 
-        // Loop through each filter and analytic type to get min/max etc.
+        // Loop through each filter and analytic type to set up the expected summary.
         $filters = ['suburb', 'state', 'country'];
         $analyticTypes = AnalyticType::all();
         foreach ($filters as $filter) {
@@ -43,8 +43,8 @@ class PropertyAnalyticsSummaryTest extends TestCase
             $totalProperties = Property::where($filter, '=', $filterValue)->count();
             foreach ($analyticTypes as $type) {
                 /*
-                Get all properties matching filter then apply Collection class's aggr methods.
-                The application uses DB raw queries, so we verify it with another method.
+                Use PHP Collection class's aggr methods to build expected data.
+                The application uses DB raw queries, so we can compare and verify the summary is accurate.
                 */
                 $collection = $type->properties()->where($filter, '=', $filterValue)->get();
                 $maxValue = $collection->max('analytic.value');
@@ -73,6 +73,7 @@ class PropertyAnalyticsSummaryTest extends TestCase
                     'value' => $filterValue
                 ]
             );
+
             $response->assertStatus(200);
             $response->assertJson($expectedData);
         }

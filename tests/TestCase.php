@@ -30,13 +30,4 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $this->faker = Faker::create();
     }
-
-    /**
-     * Reset the migrations
-     */
-    public function tearDown(): void
-    {
-        $this->artisan('migrate:reset');
-        parent::tearDown();
-    }
 }
