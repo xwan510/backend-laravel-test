@@ -160,7 +160,7 @@ checks:
 build:
     environment:
         php: '7.2.5'
-        postgres: '10'
+        postgresql: true
         hosts:
             laravel.dev: '127.0.0.1'
         variables:
