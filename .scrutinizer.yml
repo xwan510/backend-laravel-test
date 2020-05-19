@@ -159,7 +159,7 @@ checks:
         deadlock_detection_in_loops: true
 build:
     environment:
-        php: '7.1'
+        php: '7.2.5'
         mysql: '5.7'
         node: '8.1'
         hosts:
