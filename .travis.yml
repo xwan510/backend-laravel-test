@@ -21,3 +21,4 @@ before_script:
 
 script:
   - vendor/bin/phpunit
+  - cat storage/logs/laravel.log

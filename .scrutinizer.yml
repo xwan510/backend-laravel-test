@@ -179,7 +179,6 @@ build:
     dependencies:
         after:
             - php artisan migrate
-            - vendor/bin/phpunit
     tests:
         before:
             - chmod -R 777 storage
