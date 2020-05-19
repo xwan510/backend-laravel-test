@@ -192,3 +192,4 @@ build:
                 coverage:
                     file: coverage
                     format: clover
+            - command: phpunit

@@ -1,12 +1,18 @@
 # Test Laravel Project
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/?branch=master)
+
+[![Build Status](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/build-status/master)
+
 This is a Laravel test project providing APIs for property analytics inquiry.
 
 ## Requirements
 
-Make sure you have everything installed for Laravel. [Laravel](https://laravel.com/docs/7.x/installation)
-Postgres 10 and above must be installed.  [Postgres](https://www.postgresql.org/download/)
-SQLite/Mysql is not supported.
+Make sure you have server requirements checked for [Laravel](https://laravel.com/docs/7.x/installation).
+
+[Postgres 10](https://www.postgresql.org/download/) and above must be installed.
+
+Since report summary using percentile function, SQLite and lower version of pgsql is not supported.
 
 ## Installation
 
@@ -22,8 +28,10 @@ SQLite/Mysql is not supported.
 composer install
 ```
 
-#### DB schema setup and seed DB
-CSV files in database/csvs are imported to seed DB
+#### DB setup
+Run below command to create DB schema and seed DB with sample data.
+
+CSV files in database/csvs are imported to seed DB.
 ```
 php artisan migrate:fresh --seed
 ```
@@ -46,9 +54,7 @@ curl --location --request POST 'http://127.0.0.1:8000/api/v1/properties' \
 
 #### Add/update an analytic value for a property
 
-Replace {uuid} with Property's guid.
-Replace {analyticid} with an analytic type id. E.g 1
-Replace {value} with an analytic value.
+Replace {uuid} with a Property's guid. {analyticid} is a integer. E.g 1.
 ```
 curl --location --request PUT 'http://127.0.0.1:8000/api/v1/properties/{uuid}/analytics/{analyticid}?value={value}' \
 --header 'X-Requested-With: XMLHttpRequest' \
@@ -74,3 +80,19 @@ curl --location --request GET 'http://127.0.0.1:8000/api/v1/report/properties/an
 ```
 php artisan test
 ```
+
+## Design decisions
+
+The `properties` table is many-to-many mapped to `analytic_types` table with intermediate table `property_analytics` and additional field `value`.
+
+Adding/update property analytic is simply about creating/updating relations between those 2 tables.
+
+The nesting of API endpoints `properties/{uuid}/analytics/{analyticid}` makes the "belonging" relationship obvious. CRUD operations of analytics against a property should be performed on this endpont. Deleting a property means deleting the analytics with it.
+
+Properties might have sensitive info, with `{uuid}` here, it stops user iterating all properties with this API. But it might not be neccesary for protected API.
+
+The reporting API endpoint resides in `report/properties/analytics`. Reporting on large scale is an intensive job. Imaging millions of properties with hundreds of types of analytics are reported in 1 API call. 
+
+The PropertyAnalyticsReport Controller uses optimised DB query to generate the result, avoiding extensive traversing with PHP code.
+
+Ideally, the report results should be cached in various layers for performance benifits and resource consideration.
