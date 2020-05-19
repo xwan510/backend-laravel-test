@@ -5,7 +5,7 @@
 
 This is a Laravel test project providing APIs for property analytics inquiry.
 
-## Design decisions
+## Design considerations
 
 The `properties` table is many-to-many mapped to `analytic_types` table with intermediate table `property_analytics` and additional field `value`.
 
@@ -15,9 +15,9 @@ The nesting of API endpoints `properties/{uuid}/analytics/{analyticid}` makes th
 
 Properties might have sensitive info, with `{uuid}` here, it stops user iterating all properties with this API. But it might not be neccesary for protected API.
 
-The reporting API endpoint resides in `report/properties/analytics`. Reporting on large scale is an intensive job. Imaging millions of properties with hundreds of types of analytics are reported in 1 API call.
+The reporting API endpoint resides in `report/properties/analytics`. Reporting on large scale is an intensive job. Imaging millions of properties with hundreds of types of analytics are processed in 1 API call, it has to be fast.
 
-The PropertyAnalyticsReport Controller uses optimised DB query to generate the result, avoiding extensive traversing with PHP code.
+The PropertyAnalyticsReport Controller uses optimised DB query to generate the result, avoiding extensive traversing with PHP code. DB aggr function such as percentile_cont() and casting is used to make sure result is produced fast and accurate, this is also the reason for dropped support of SQLite/Mysql.
 
 Ideally, the report results should be cached in various layers for performance benifits and resource consideration.
 
