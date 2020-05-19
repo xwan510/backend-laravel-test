@@ -177,10 +177,6 @@ build:
             - vendor/
             - ~/.composer/cache/
     dependencies:
-        before:
-            - psql -c 'CREATE DATABASE scrutinizer WITH OWNER scrutinizer;'
-            - psql -c "ALTER ROLE scrutinizer WITH PASSWORD 'scrutinizer'"
-            - psql -c 'GRANT ALL PRIVILEGES ON DATABASE "scrutinizer" to scrutinizer'
         after:
             - php artisan migrate
             - vendor/bin/phpunit
