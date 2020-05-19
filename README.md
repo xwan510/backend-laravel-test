@@ -1,10 +1,26 @@
 # Test Laravel Project
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/?branch=master)
-
 [![Build Status](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/badges/build.png?b=master)](https://scrutinizer-ci.com/g/xwan510/backend-laravel-test/build-status/master)
 
 This is a Laravel test project providing APIs for property analytics inquiry.
+
+## Design decisions
+
+The `properties` table is many-to-many mapped to `analytic_types` table with intermediate table `property_analytics` and additional field `value`.
+
+Adding/update property analytic is simply about creating/updating relations between those 2 tables.
+
+The nesting of API endpoints `properties/{uuid}/analytics/{analyticid}` makes the "belonging" relationship obvious. CRUD operations of analytics against a property should be performed on this endpont. Deleting a property means deleting the analytics with it.
+
+Properties might have sensitive info, with `{uuid}` here, it stops user iterating all properties with this API. But it might not be neccesary for protected API.
+
+The reporting API endpoint resides in `report/properties/analytics`. Reporting on large scale is an intensive job. Imaging millions of properties with hundreds of types of analytics are reported in 1 API call.
+
+The PropertyAnalyticsReport Controller uses optimised DB query to generate the result, avoiding extensive traversing with PHP code.
+
+Ideally, the report results should be cached in various layers for performance benifits and resource consideration.
+
 
 ## Requirements
 
@@ -80,19 +96,3 @@ curl --location --request GET 'http://127.0.0.1:8000/api/v1/report/properties/an
 ```
 php artisan test
 ```
-
-## Design decisions
-
-The `properties` table is many-to-many mapped to `analytic_types` table with intermediate table `property_analytics` and additional field `value`.
-
-Adding/update property analytic is simply about creating/updating relations between those 2 tables.
-
-The nesting of API endpoints `properties/{uuid}/analytics/{analyticid}` makes the "belonging" relationship obvious. CRUD operations of analytics against a property should be performed on this endpont. Deleting a property means deleting the analytics with it.
-
-Properties might have sensitive info, with `{uuid}` here, it stops user iterating all properties with this API. But it might not be neccesary for protected API.
-
-The reporting API endpoint resides in `report/properties/analytics`. Reporting on large scale is an intensive job. Imaging millions of properties with hundreds of types of analytics are reported in 1 API call. 
-
-The PropertyAnalyticsReport Controller uses optimised DB query to generate the result, avoiding extensive traversing with PHP code.
-
-Ideally, the report results should be cached in various layers for performance benifits and resource consideration.
