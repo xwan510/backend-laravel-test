@@ -160,26 +160,27 @@ checks:
 build:
     environment:
         php: '7.2.5'
-        mysql: '5.7'
-        node: '8.1'
+        postgres: '10'
         hosts:
             laravel.dev: '127.0.0.1'
         variables:
             APP_KEY: ''
             APP_ENV: 'testing'
-            DB_CONNECTION: 'mysql'
-            DB_PORT: '3306'
+            DB_CONNECTION: 'pgsql'
+            DB_PORT: '5432'
             DB_HOST: '127.0.0.1'
             DB_DATABASE: 'scrutinizer'
-            DB_USERNAME: 'root'
-            DB_PASSWORD: ''
+            DB_USERNAME: 'scrutinizer'
+            DB_PASSWORD: 'scrutinizer'
     cache:
         directories:
             - vendor/
             - ~/.composer/cache/
     dependencies:
         before:
-            - mysql -uroot -e 'CREATE DATABASE scrutinizer'
+            - psql -c 'CREATE DATABASE scrutinizer WITH OWNER scrutinizer;'
+            - psql -c "ALTER ROLE scrutinizer WITH PASSWORD 'scrutinizer'"
+            - psql -c 'GRANT ALL PRIVILEGES ON DATABASE "scrutinizer" to scrutinizer'
         after:
             - php artisan migrate
             - vendor/bin/phpunit

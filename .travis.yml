@@ -4,8 +4,8 @@ language: php
 php:
   - 7.2
 
-addons:
-  mariadb: 10.4
+services:
+  - postgresql
 
 cache:
   directories:
@@ -14,7 +14,7 @@ cache:
 
 before_script:
   - cp .env.travis .env
-  - sudo mysql -e 'CREATE DATABASE testing;'
+  - psql -c 'create database testing;' -U postgres
   - composer self-update
   - composer install --no-interaction
   - php artisan migrate --no-interaction -vvv
