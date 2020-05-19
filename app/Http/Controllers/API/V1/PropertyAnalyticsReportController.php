@@ -45,21 +45,21 @@ class PropertyAnalyticsReportController extends Controller
                                         analytic_types.units,
                                         analytic_types.is_numeric,
                                         analytic_types.num_decimal_places,
-                                        min(value::float) as min,
-                                        max(value::float) as max,
-                                        percentile_cont(0.5) within group (order by value::float) as median,
+                                        min(cast(value as float)) as min,
+                                        max(cast(value as float)) as max,
+                                        percentile_cont(0.5) within group (order by cast(value as float)) as median,
                                         concat(
-                                            round(
+                                            cast(round(
                                                 count(value)::decimal * 100 / '.$total.',
                                                 2
-                                            )::float,
+                                            ) as float),
                                             \'%\'
                                         ) as has_value,
                                         concat(
-                                            round(
+                                            cast(round(
                                                 ('.$total.' - count(value)::decimal) * 100 / '.$total.',
                                                 2
-                                            )::float,
+                                            ) as float),
                                             \'%\'
                                         ) as has_no_value
                                         '))
