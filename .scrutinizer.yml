@@ -158,6 +158,10 @@ checks:
         avoid_aliased_php_functions: true
         deadlock_detection_in_loops: true
 build:
+    nodes:
+    my-node:
+      services:
+        postgres: 10
     environment:
         php: '7.2.5'
         postgresql: true
@@ -167,7 +171,7 @@ build:
             APP_KEY: ''
             APP_ENV: 'testing'
             DB_CONNECTION: 'pgsql'
-            DB_PORT: '5432'
+            DB_PORT: '5435'
             DB_HOST: '127.0.0.1'
             DB_DATABASE: 'scrutinizer'
             DB_USERNAME: 'scrutinizer'
