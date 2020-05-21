@@ -8,13 +8,12 @@ addons:
   postgresql: "10"
   apt:
     packages:
-      - postgresql-10-postgis-2.4
-      - postgresql-10-postgis-2.4-scripts
-      - postgresql-client-10
+    - postgresql-10
+    - postgresql-client-10
 env:
   global:
   - PGPORT=5433
-  
+
 cache:
   directories:
     - node_modules
