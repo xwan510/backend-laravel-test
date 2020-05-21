@@ -26,7 +26,7 @@ Ideally, the report results should be cached in various layers for performance b
 
 Make sure you have server requirements checked for [Laravel](https://laravel.com/docs/7.x/installation).
 
-[Postgres 12](https://www.postgresql.org/download/) and above must be installed(for percentile_cont func). I have tested Unit tests on Postgres 12.5.
+[Postgres 10](https://www.postgresql.org/download/) and above must be installed(for percentile_cont func). I have tested Unit tests on Postgres 12.5.
 
 Since report summary using percentile function, SQLite and lower version of pgsql is not supported.
 
@@ -45,9 +45,17 @@ composer install
 ```
 
 #### DB setup
+
+Create Database with name defined in .env. For example,
+
+```
+createdb laravel
+```
+
 Run below command to create DB schema and seed DB with sample data.
 
 CSV files in database/csvs are imported to seed DB.
+
 ```
 php artisan migrate:fresh --seed
 ```
