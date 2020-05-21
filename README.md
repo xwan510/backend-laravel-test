@@ -26,7 +26,7 @@ Ideally, the report results should be cached in various layers for performance b
 
 Make sure you have server requirements checked for [Laravel](https://laravel.com/docs/7.x/installation).
 
-[Postgres 9.4](https://www.postgresql.org/download/) and above must be installed.
+[Postgres 9.4](https://www.postgresql.org/download/) and above must be installed(for percentile_cont func). Unit tests is run on Postgres 12 though.
 
 Since report summary using percentile function, SQLite and lower version of pgsql is not supported.
 
