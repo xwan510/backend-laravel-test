@@ -26,7 +26,7 @@ Ideally, the report results should be cached in various layers for performance b
 
 Make sure you have server requirements checked for [Laravel](https://laravel.com/docs/7.x/installation).
 
-[Postgres 10](https://www.postgresql.org/download/) and above must be installed.
+[Postgres 9.4](https://www.postgresql.org/download/) and above must be installed.
 
 Since report summary using percentile function, SQLite and lower version of pgsql is not supported.
 

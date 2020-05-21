@@ -182,13 +182,9 @@ build:
     tests:
         before:
             - chmod -R 777 storage
+            - command: vendor/bin/phpunit
         override:
             - php-scrutinizer-run
             -
                 command: phpcs-run
                 use_website_config: true
-            -
-                command: vendor/bin/phpunit --coverage-clover=coverage
-                coverage:
-                    file: coverage
-                    format: clover
