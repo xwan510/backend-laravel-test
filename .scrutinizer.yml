@@ -159,7 +159,6 @@ checks:
         deadlock_detection_in_loops: true
 build:
     nodes:
-    my-node:
       services:
         postgres: 10
     environment:
