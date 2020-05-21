@@ -159,8 +159,9 @@ checks:
         deadlock_detection_in_loops: true
 build:
     nodes:
-      services:
-        postgres: 10
+        my-node:
+            services:
+                postgres: 10
     environment:
         php: '7.2.5'
         postgresql: true
