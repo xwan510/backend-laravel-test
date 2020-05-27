@@ -16,6 +16,7 @@ class PropertyAnalyticController extends Controller
      * Show analytics for a property.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  string $guid
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request, $guid)
